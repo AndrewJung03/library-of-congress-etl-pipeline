@@ -18,7 +18,17 @@ def connect():
 
 
 def create_tables():
-    commands = [
+    drop_commands = [
+        "DROP TABLE IF EXISTS issue_subjects CASCADE;",
+        "DROP TABLE IF EXISTS subjects CASCADE;",
+        "DROP TABLE IF EXISTS issue_languages CASCADE;",
+        "DROP TABLE IF EXISTS languages CASCADE;",
+        "DROP TABLE IF EXISTS issues CASCADE;",
+        "DROP TABLE IF EXISTS locations CASCADE;",
+        "DROP TABLE IF EXISTS newspapers CASCADE;"
+    ]
+
+    create_commands = [
 
         # newspapers
         """
@@ -92,14 +102,19 @@ def create_tables():
     conn = connect()
     cur = conn.cursor()
 
-    for command in commands:
+    # Drop all existing tables
+    for command in drop_commands:
+        cur.execute(command)
+
+    # Recreate tables fresh
+    for command in create_commands:
         cur.execute(command)
 
     conn.commit()
     cur.close()
     conn.close()
 
-    print("All tables created successfully!")
+    print("All tables dropped and recreated successfully!")
 
 
 if __name__ == "__main__":

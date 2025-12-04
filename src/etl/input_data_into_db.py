@@ -185,4 +185,4 @@ def input_into_db():
 
 
 if __name__ == "__main__":
-    input_into_db()
+    input_into_db() 
