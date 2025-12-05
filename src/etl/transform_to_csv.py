@@ -120,5 +120,3 @@ def json_to_csv(input_json_path):
     return csv_path
 
 
-if __name__ == "__main__":
-    json_to_csv("data/raw/newspapers_raw.json")

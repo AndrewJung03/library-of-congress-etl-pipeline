@@ -183,6 +183,3 @@ def input_into_db():
     print("\n=== FINISHED INSERTING DATA ===")
 
 
-
-if __name__ == "__main__":
-    input_into_db() 

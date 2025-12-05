@@ -44,5 +44,4 @@ def fetch_from_api(collection="newspapers", max_pages=20, delay=1):
     return output_path
 
 
-if __name__ == "__main__":
-    fetch_from_api(collection="newspapers", max_pages=20)
+

@@ -137,9 +137,4 @@ def pages_per_issue():
 
 
 
-if __name__ == "__main__":
-    issues_per_year()
-    issues_per_state()
-    language_frequency()
-    pages_per_issue()
-    print("Charts generated.")
+
