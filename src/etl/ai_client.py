@@ -24,10 +24,6 @@ Your job:
 
 
 def load_dataset_summary(df: pd.DataFrame) -> str:
-    """
-    Converts the dataframe into a compact text summary that Gemini can reason over.
-    Not the full dataset, but a compressed slice + schema.
-    """
     info = []
 
     info.append("COLUMNS:\n" + ", ".join(df.columns) + "\n")
@@ -43,9 +39,6 @@ def load_dataset_summary(df: pd.DataFrame) -> str:
 
 
 def ask_ai(question: str, df: pd.DataFrame) -> str:
-    """
-    Sends dataset context + question to Gemini and returns the answer.
-    """
     dataset_context = load_dataset_summary(df)
 
     prompt = (

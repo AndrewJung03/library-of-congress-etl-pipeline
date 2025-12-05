@@ -7,9 +7,6 @@ PROCESSED_DIR = "data/processed"
 
 
 def safe_get(obj, key, default=""):
-    """
-    Extract keys from obj and return default if missing.
-    """
     if key not in obj:
         return default
 
