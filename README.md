@@ -37,6 +37,9 @@ etl-pipeline-project/
 │   ├── language_frequency.png
 │   └── pages_per_issue.png
 │
+├── logs/
+│   ├── etl_pipeline.log
+│
 ├── src/
 │   └── etl/
 │        ├── fetch_from_api.py           # Fetch raw JSON from the API
