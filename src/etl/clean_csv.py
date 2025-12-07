@@ -17,7 +17,7 @@ def is_valid_date(date_str):
         return False
 
 def clean_newspapers_csv():
-    print("\n=== CLEANING NEWSPAPERS CSV ===\n")
+    print("\n--- CLEANING NEWSPAPERS CSV ---\n")
 
     # Load data
     df = pd.read_csv(RAW_CSV)
@@ -59,16 +59,14 @@ def clean_newspapers_csv():
 
     print(f"Rows before cleaning: {original_count}")
 
-    # ---------------------------------------------------------
     # 1. Remove duplicate IDs
-    # ---------------------------------------------------------
+
     before = len(df)
     df = df.drop_duplicates(subset=["id"])
     removed_duplicates = before - len(df)
 
-    # ---------------------------------------------------------
     # 2. Reject missing CRITICAL fields
-    # ---------------------------------------------------------
+
     rejected_rows = pd.DataFrame(columns=df.columns)
 
     for field in critical_fields:
@@ -79,9 +77,7 @@ def clean_newspapers_csv():
             stats["missing_critical_rows"] += len(reject_chunk)
             df = df[~missing_mask]
 
-    # ---------------------------------------------------------
     # 3. Reject rows with invalid date formats
-    # ---------------------------------------------------------
     invalid_date_mask = ~df["item_date_issued"].apply(is_valid_date)
     if invalid_date_mask.any():
         reject_chunk = df[invalid_date_mask]
@@ -89,9 +85,7 @@ def clean_newspapers_csv():
         stats["invalid_date_rows"] += len(reject_chunk)
         df = df[~invalid_date_mask]
 
-    # ---------------------------------------------------------
     # 4. Reject rows missing any LOCATION fields
-    # ---------------------------------------------------------
     for loc_field in location_fields:
         missing_mask = df[loc_field].isna() | (df[loc_field].astype(str).str.strip() == "")
         if missing_mask.any():
@@ -100,9 +94,9 @@ def clean_newspapers_csv():
             stats["missing_location_rows"] += len(reject_chunk)
             df = df[~missing_mask]
 
-    # ---------------------------------------------------------
+    
     # 5. Fill non-critical missing fields with "unknown"
-    # ---------------------------------------------------------
+    
     for field in non_critical_fill_unknown:
         mask = df[field].isna() | (df[field].astype(str).str.strip() == "")
         fill_count = mask.sum()
@@ -110,27 +104,21 @@ def clean_newspapers_csv():
             stats["placeholder_fills"][field] = fill_count
             df.loc[mask, field] = "unknown"
 
-    # ---------------------------------------------------------
     # 6. Lowercase fields (NOT IDs or URLs)
-    # ---------------------------------------------------------
     for field in lowercase_fields:
         mask = df[field].notna()
         before_values = df.loc[mask, field].astype(str)
         df.loc[mask, field] = before_values.str.lower()
         stats["lowercase_ops"][field] = mask.sum()
 
-    # ---------------------------------------------------------
     # 7. Save results
-    # ---------------------------------------------------------
     df.to_csv(CLEANED_FILE, index=False)
     rejected_rows.to_csv(REJECTED_FILE, index=False)
 
     final_count = len(df)
 
-    # ---------------------------------------------------------
     # 8. Print summary
-    # ---------------------------------------------------------
-    print("\n=== CLEANING SUMMARY ===")
+    print("\n--- CLEANING SUMMARY ---")
     print(f"Rows before cleaning: {original_count}")
     print(f"Duplicates removed:  {removed_duplicates}")
     print(f"Rows rejected:       {len(rejected_rows)}")
@@ -151,10 +139,6 @@ def clean_newspapers_csv():
 
     print(f"\nCleaned CSV saved to:  {CLEANED_FILE}")
     print(f"Rejected CSV saved to: {REJECTED_FILE}")
-
-
-if __name__ == "__main__":
-    clean_newspapers_csv()
 
 
 

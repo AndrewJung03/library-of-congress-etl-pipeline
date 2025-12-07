@@ -13,7 +13,7 @@ from src.etl.make_charts import (
 )
 
 def run_pipeline():
-    print("\n === ETL PIPELINE STARTED ===")
+    print("\n --- ETL PIPELINE STARTED ---")
     print("\n")
     print("\n")
     print("\n--- FETCHING DATA FROM API ---")
@@ -35,7 +35,7 @@ def run_pipeline():
     issues_per_state()
     language_frequency()
     pages_per_issue()
-    print("\n=== ETL PIPELINE COMPLETED ===")
+    print("\n--- ETL PIPELINE COMPLETED ---")
 
 if __name__ == "__main__":
     run_pipeline()

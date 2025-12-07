@@ -19,7 +19,7 @@ def connect():
     )
 
 def input_into_db():
-    print("\n=== LOADING CLEANED DATA INTO POSTGRES ===")
+    print("\n--- LOADING CLEANED DATA INTO POSTGRES ---")
 
     df = pd.read_csv(CLEAN_CSV)
     print(f"Loaded {len(df)} cleaned rows.")
@@ -180,6 +180,6 @@ def input_into_db():
     cur.close()
     conn.close()
 
-    print("\n=== FINISHED INSERTING DATA ===")
+    print("\n--- FINISHED INSERTING DATA ---")
 
 
