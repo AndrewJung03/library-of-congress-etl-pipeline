@@ -1,4 +1,5 @@
 import psycopg2
+from .logger import get_logger   # <-- added
 
 DB_NAME = "newspapers"
 DB_USER = "etl_user"
@@ -6,18 +7,28 @@ DB_PASSWORD = "9660"
 DB_HOST = "localhost"
 DB_PORT = "5432"
 
+# Create logger for this module
+logger = get_logger("db_setup")
 
 def connect():
-    return psycopg2.connect(
-        dbname=DB_NAME,
-        user=DB_USER,
-        password=DB_PASSWORD,
-        host=DB_HOST,
-        port=DB_PORT
-    )
-
+    logger.info("Attempting database connection...")
+    try:
+        conn = psycopg2.connect(
+            dbname=DB_NAME,
+            user=DB_USER,
+            password=DB_PASSWORD,
+            host=DB_HOST,
+            port=DB_PORT
+        )
+        logger.info("Database connection successful.")
+        return conn
+    except Exception as e:
+        logger.error(f"Database connection failed: {e}")
+        raise
 
 def create_tables():
+    logger.info("Starting table drop + recreate process...")
+
     drop_commands = [
         "DROP TABLE IF EXISTS issue_subjects CASCADE;",
         "DROP TABLE IF EXISTS subjects CASCADE;",
@@ -99,20 +110,40 @@ def create_tables():
         """
     ]
 
-    conn = connect()
-    cur = conn.cursor()
+    try:
+        conn = connect()
+        cur = conn.cursor()
+    except Exception:
+        logger.error("Could not initialize cursor/connection for table creation.")
+        raise
 
     # Drop all existing tables
+    logger.info("Dropping existing tables...")
     for command in drop_commands:
-        cur.execute(command)
+        try:
+            cur.execute(command)
+        except Exception as e:
+            logger.error(f"Failed to execute DROP command: {e}")
+            raise
 
     # Recreate tables fresh
+    logger.info("Creating tables...")
     for command in create_commands:
-        cur.execute(command)
+        try:
+            cur.execute(command)
+        except Exception as e:
+            logger.error(f"Failed to execute CREATE TABLE command: {e}")
+            raise
 
-    conn.commit()
+    try:
+        conn.commit()
+        logger.info("All table changes committed to database.")
+    except Exception as e:
+        logger.error(f"Commit failed: {e}")
+        raise
+
     cur.close()
     conn.close()
 
+    logger.info("All tables dropped and recreated successfully.")
     print("All tables dropped and recreated successfully")
-

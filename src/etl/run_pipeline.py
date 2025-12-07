@@ -12,12 +12,13 @@ from src.etl.make_charts import (
     pages_per_issue
 )
 
+
 def run_pipeline():
     print("\n --- ETL PIPELINE STARTED ---")
     print("\n")
     print("\n")
     print("\n--- FETCHING DATA FROM API ---")
-    fetch_from_api(collection="newspapers", max_pages=25)
+    fetch_from_api(collection="newspapers", max_pages=2)
     print("\n--- TRANSFORMING JSON → CSV...")
     json_to_csv("data/raw/newspapers_raw.json")
     time.sleep(1)
