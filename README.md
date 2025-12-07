@@ -17,33 +17,7 @@ This project is a fully automated ETL (Extract, Transform, Load) pipeline that d
 
 ## Project Overview
 
-### Extract
-- Fetches JSON data from the Library on Congress Newspaper API
-- Handles pagination
-- Saves combined raw JSON into data/raw/
-
-### Transform
-- Converts JSON --> CSV 
-- Cleans invalid rows, enforces schema rules, standardizes text fields
-- produces
-    - data/cleaned/newspapers_cleaned.csv
-    - data/cleaned/newspapers_rejected.csv
-
-### Load
-- Creates normalized relational schema in PostgreSQL
-- Inserts cleaned data into tables
-
-### Analyze 
-- Creates visual charts
-    - Issues per year
-    - Language frequency
-    - Pages per issue
-- Uses AI to create insights
-    - loads cleaned CSV
-    - Lets user chat with AI assistant (Google Gemini) about the dataset
-    - Provides insights, statistics, patterns, and explanations
-
-## Folder Structure 
+### Folder Structure 
 ```
 etl-pipeline-project/
 │
@@ -81,3 +55,28 @@ etl-pipeline-project/
 
 ```
 
+### Extract
+- Fetches JSON data from the Library on Congress Newspaper API
+- Handles pagination
+- Saves combined raw JSON into data/raw/
+
+### Transform
+- Converts JSON --> CSV 
+- Cleans invalid rows, enforces schema rules, standardizes text fields
+- Produces
+    - data/cleaned/newspapers_cleaned.csv
+    - data/cleaned/newspapers_rejected.csv
+
+### Load
+- Creates normalized relational schema in PostgreSQL
+- Inserts cleaned data into tables
+
+### Analyze 
+- Creates visual charts
+    - Issues per year
+    - Language frequency
+    - Pages per issue
+- Uses AI to create insights
+    - loads cleaned CSV
+    - Lets user chat with AI assistant (Google Gemini) about the dataset
+    - Provides insights, statistics, patterns, and explanations
