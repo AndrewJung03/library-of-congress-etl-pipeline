@@ -2,84 +2,138 @@
 <!-- Languages -->
 ![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python&logoColor=white)
 ![SQL](https://img.shields.io/badge/SQL-PostgreSQL-blue?logo=postgresql)
-
 <!-- Frameworks / Libraries -->
 ![Pandas](https://img.shields.io/badge/Pandas-Data%20Processing-orange?logo=pandas)
 ![Matplotlib](https://img.shields.io/badge/Matplotlib-Visualization-yellow)
 ![psycopg2](https://img.shields.io/badge/psycopg2-Postgres%20Adapter-lightgrey)
 ![Gemini](https://img.shields.io/badge/Google%20Gemini-API-purple?logo=google)
-![dotenv](https://img.shields.io/badge/python--dotenv-Env%20Management-green)
 ![Pytest](https://img.shields.io/badge/Pytest-Testing-blue?logo=pytest)
-![Library of Congress](https://img.shields.io/badge/Library%20of%20Congress-API-blue)
+# Overview
 
-# Library of Congress Newspaper ETL Pipeline
-This project is a fully automated ETL (Extract, Transform, Load) pipeline that downloads historical newspaper data from the Library of Congress API. It then cleans and normalizes the data, creates SQL tables in a PostgreseSQL database, loads the data into the tables, generates analytic charts, and then supports AI insights powered by Google Gemini.
+This project implements a fully automated ETL pipeline that ingests historical newspaper data from the Library of Congress Newspaper API, cleans and validates the dataset, loads it into a normalized PostgreSQL database, and generates analytical charts.
+It also integrates Google Gemini for AI-powered insights on the cleaned data, enabling natural-language exploration of the dataset.
 
-## Project Overview
+This project simulates a production-grade data engineering workflow, with logging, testing, modular architecture, and structured pipelines.
 
-### Folder Structure 
+# Project Structure
 ```
 etl-pipeline-project/
 │
 ├── data/
-│   ├── raw/                 
-│   │    └── newspapers_raw.json         # Raw JSON downloaded from LOC API
-│   │
-│   ├── processed/           
-│   │    └── newspapers.csv              # CSV created from raw JSON
-│   │
-│   └── cleaned/             
-│        ├── newspapers_cleaned.csv      # Cleaned dataset (final)
-│        └── newspapers_rejected.csv     # Rows removed during validation
+│   ├── raw/                         # Raw API JSON responses
+│   ├── processed/                   # CSV created from JSON
+│   └── cleaned/                     # Cleaned + rejected CSV outputs
 │
-├── images/                  
-│   ├── issues_per_year.png
-│   ├── language_frequency.png
-│   └── pages_per_issue.png
+├── images/                          # Auto-generated analytic charts
 │
 ├── logs/
-│   ├── etl_pipeline.log
+│   └── etl_pipeline.log             # Rotating log file for all ETL stages
 │
 ├── src/
 │   └── etl/
-│        ├── fetch_from_api.py           # Fetch raw JSON from the API
-│        ├── transform_to_csv.py         # Convert JSON → CSV
-│        ├── clean_csv.py                # Clean data & validate records
-│        ├── create_tables.py            # Build PostgreSQL schema
-│        ├── input_data_into_db.py       # Load cleaned data into PostgreSQL
-│        ├── make_charts.py              # Generate analytics charts
-│        ├── ai_client.py                # AI insights using Gemini
-│        ├── logger.py                   # Centralized ETL logging
-│        └── run_pipeline.py             # Orchestrates the full ETL pipeline
+│        ├── fetch_from_api.py       # Extract raw JSON from LOC API
+│        ├── transform_to_csv.py     # Transform JSON → CSV
+│        ├── clean_csv.py            # Validate + standardize data
+│        ├── create_tables.py        # PostgreSQL schema creation
+│        ├── input_data_into_db.py   # Load cleaned data into DB
+│        ├── make_charts.py          # Generate visual analytics
+│        ├── ai_client.py            # Gemini-powered dataset insights
+│        ├── logger.py               # Centralized rotating log handler
+│        └── run_pipeline.py         # One-click full ETL orchestration
 │
-├── tests/                               # Unit tests for every ETL stage
+├── tests/                           # Pytest suite for every ETL stage
 │
 └── README.md
-
 ```
 
-### Extract
-- Fetches JSON data from the Library on Congress Newspaper API
-- Handles pagination
-- Saves combined raw JSON into data/raw/
+# ETL Workflow
 
-### Transform
-- Converts JSON --> CSV 
-- Cleans invalid rows, enforces schema rules, standardizes text fields
-- Produces
-    - data/cleaned/newspapers_cleaned.csv
-    - data/cleaned/newspapers_rejected.csv
+## 1. Extract
 
-### Load
-- Creates normalized relational schema in PostgreSQL
-- Inserts cleaned data into tables
+- Connects to the Library of Congress (LOC) Newspapers API
 
-### Analyze 
-- Creates visual charts
-    - Issues per year
-    - Language frequency
-    - Pages per issue
-- Uses AI to create insights
-    - loads cleaned CSV
-    - Lets user chat with AI assistant (Google Gemini) about the dataset
-    - Provides insights, statistics, patterns, and explanations
+- Handles pagination automatically
+
+- Logs network failures, retries, and request progress
+
+- Saves the combined results as:
+
+- data/raw/newspapers_raw.json
+
+## 2. Transform
+
+- JSON → CSV
+
+- Converts raw API JSON into a structured CSV file
+
+- Normalizes nested fields
+
+- Extracts text lists, cleans URLs, merges columns
+
+- Data Cleaning & Validation
+
+- Performed in clean_csv.py:
+
+    - Removes duplicate records
+    - Rejects rows with missing critical fields
+    - Rejects invalid or unparseable dates
+    - Rejects incomplete location information
+    - Lowercases text fields for normalization
+    - Fills non-critical missing fields with "unknown"
+    - Produces two final files:
+
+- data/cleaned/newspapers_cleaned.csv
+- data/cleaned/newspapers_rejected.csv
+
+
+## 3. Load (PostgreSQL)
+
+- A fully normalized schema is created:
+
+    - newspapers
+    - locations
+    - issues
+    - languages
+    - subjects
+    - issue_languages (junction)
+    - issue_subjects (junction)
+
+- Cleaned data is inserted using input_data_into_db.py.
+
+## 4. Analyze (Charts)
+
+- make_charts.py automatically generates (saved in /images/):
+
+    - Issues Per Year
+    - Issues Per State
+    - Language Frequency
+    - Page Count Distribution
+
+## 5. AI Insights (Google Gemini)
+
+- ai_client.py enables:
+
+    - Loading cleaned CSV data
+
+    - Analysis using Gemini
+
+# Testing
+
+- The project includes Pytest test cases for:
+
+    - Database connection
+
+    - Table creation
+
+    - Data loading
+
+    - Chart generation
+
+    - Transform functions
+
+    - API fetching
+
+# Logging
+
+- When the pipeline is run, logs are stores in /logs/
+
