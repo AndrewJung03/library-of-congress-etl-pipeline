@@ -91,7 +91,7 @@ etl-pipeline-project/
 
 ## 4. Analyze (Charts)
 
-- make_charts.py automatically generates (saved in /images/):
+- make_charts.py automatically generates (saved in /images):
     - Issues Per Year
     - Issues Per State
     - Language Frequency
