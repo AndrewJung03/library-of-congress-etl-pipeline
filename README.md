@@ -51,29 +51,19 @@ etl-pipeline-project/
 ## 1. Extract
 
 - Connects to the Library of Congress (LOC) Newspapers API
-
 - Handles pagination automatically
-
 - Logs network failures, retries, and request progress
-
 - Saves the combined results as:
-
 - data/raw/newspapers_raw.json
 
 ## 2. Transform
 
 - JSON → CSV
-
 - Converts raw API JSON into a structured CSV file
-
 - Normalizes nested fields
-
 - Extracts text lists, cleans URLs, merges columns
-
 - Data Cleaning & Validation
-
 - Performed in clean_csv.py:
-
     - Removes duplicate records
     - Rejects rows with missing critical fields
     - Rejects invalid or unparseable dates
@@ -81,15 +71,11 @@ etl-pipeline-project/
     - Lowercases text fields for normalization
     - Fills non-critical missing fields with "unknown"
     - Produces two final files:
-
 - data/cleaned/newspapers_cleaned.csv
 - data/cleaned/newspapers_rejected.csv
-
-
 ## 3. Load (PostgreSQL)
 
 - A fully normalized schema is created:
-
     - newspapers
     - locations
     - issues
@@ -97,43 +83,28 @@ etl-pipeline-project/
     - subjects
     - issue_languages (junction)
     - issue_subjects (junction)
-
 - Cleaned data is inserted using input_data_into_db.py.
 
 ## 4. Analyze (Charts)
 
 - make_charts.py automatically generates (saved in /images/):
-
     - Issues Per Year
     - Issues Per State
     - Language Frequency
     - Page Count Distribution
 
 ## 5. AI Insights (Google Gemini)
-
 - ai_client.py enables:
-
     - Loading cleaned CSV data
-
     - Analysis using Gemini
-
 # Testing
-
 - The project includes Pytest test cases for:
-
     - Database connection
-
     - Table creation
-
     - Data loading
-
     - Chart generation
-
     - Transform functions
-
     - API fetching
-
 # Logging
-
 - When the pipeline is run, logs are stores in /logs/
 
