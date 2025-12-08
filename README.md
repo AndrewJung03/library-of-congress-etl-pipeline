@@ -54,12 +54,13 @@ etl-pipeline-project/
 - Handles pagination automatically
 - Logs network failures, retries, and request progress
 - Saves the combined results as:
-- data/raw/newspapers_raw.json
+    - data/raw/newspapers_raw.json
+- ![Example Charts](readme_images/csv.png)
 
 ## 2. Transform
 
-- JSON → CSV
 - Converts raw API JSON into a structured CSV file
+    - data/processed/newspapers.csv
 - Normalizes nested fields
 - Extracts text lists, cleans URLs, merges columns
 - Data Cleaning & Validation
@@ -70,9 +71,10 @@ etl-pipeline-project/
     - Rejects incomplete location information
     - Lowercases text fields for normalization
     - Fills non-critical missing fields with "unknown"
-    - Produces two final files:
-- data/cleaned/newspapers_cleaned.csv
-- data/cleaned/newspapers_rejected.csv
+- Produces two final files:
+    - data/cleaned/newspapers_cleaned.csv
+    - data/cleaned/newspapers_rejected.csv
+- ![Example Charts](readme_images/chartex2.png)
 ## 3. Load (PostgreSQL)
 
 - A fully normalized schema is created:
@@ -84,6 +86,9 @@ etl-pipeline-project/
     - issue_languages (junction)
     - issue_subjects (junction)
 - Cleaned data is inserted using input_data_into_db.py.
+    - ![Database Schema](readme_images/db.png)
+
+
 
 ## 4. Analyze (Charts)
 
@@ -92,11 +97,15 @@ etl-pipeline-project/
     - Issues Per State
     - Language Frequency
     - Page Count Distribution
+    - Examples:
+        - ![Example Charts](readme_images/chartex1.png)
+        - ![Example Charts](readme_images/chartex2.png)
 
 ## 5. AI Insights (Google Gemini)
 - ai_client.py enables:
     - Loading cleaned CSV data
     - Analysis using Gemini
+    - ![Example Charts](readme_images/ai.png)
 # Testing
 - The project includes Pytest test cases for:
     - Database connection
@@ -105,6 +114,8 @@ etl-pipeline-project/
     - Chart generation
     - Transform functions
     - API fetching
+    - ![Example Charts](readme_images/pytest.png)
 # Logging
-- When the pipeline is run, logs are stores in /logs/
+- When the pipeline is run, logs are stores in /logs
+- ![Example Charts](readme_images/logs.png)
 
