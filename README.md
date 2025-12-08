@@ -74,7 +74,6 @@ etl-pipeline-project/
 - Produces two final files:
     - data/cleaned/newspapers_cleaned.csv
     - data/cleaned/newspapers_rejected.csv
-- ![Example Charts](readme_images/chartex2.png)
 ## 3. Load (PostgreSQL)
 
 - A fully normalized schema is created:
